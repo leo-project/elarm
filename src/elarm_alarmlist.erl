@@ -63,8 +63,8 @@ new_alarm(#alarm{ alarm_id = AlId, src = Src, event_id = EventId } = Alarm,
     {ok, State}.
 
 -spec repeat_alarm(alarm(), #al_state{}) -> {ok, #al_state{}} | {error, term()}.
-repeat_alarm(_Alarm, State) ->
-    {ok, State}.
+repeat_alarm(Alarm, State) ->
+    new_alarm(Alarm, State).
 
 -spec acknowledge(alarm_id(), alarm_src(), ack_info(), #al_state{}) ->
           {ok, #al_state{}} | {error, term()}.
@@ -87,7 +87,7 @@ unacknowledge(AlarmId, Src, AckInfo,
 %% Add a comment to an alarm
 -spec add_comment(alarm_id(), alarm_src(), comment(), #al_state{}) ->
           {ok, #al_state{}} | {error, term()}.
-add_comment(AlarmId, Src, Comment, #al_state{ alarmlist = AList } = State) -> 
+add_comment(AlarmId, Src, Comment, #al_state{ alarmlist = AList } = State) ->
     Key = {AlarmId,Src},
     [{_Key, #alarm{ comments = Cs } = Alarm}] = ets:lookup(AList, Key),
     true = ets:insert(AList, {Key,Alarm#alarm{ comments = [Comment|Cs] }}),
