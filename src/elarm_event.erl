@@ -78,8 +78,8 @@ new_alarm(Alarm, #evt_state{ subs = Subs } = State) ->
 
 -spec repeat_alarm(alarm(), #evt_state{}) ->
           {ok, #evt_state{}} | {error, term()}.
-repeat_alarm(_Alarm, State) ->
-    {ok, State}.
+repeat_alarm(Alarm, State) ->
+    new_alarm(Alarm, State).
 
 -spec acknowledge(alarm_id(), alarm_src(), event_id(), ack_info(),
                   #evt_state{}) ->
