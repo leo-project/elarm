@@ -152,7 +152,7 @@ al_test_() ->
 just_started() ->
     {ok,State} = init([]),
     ?assertEqual({{ok,[]}, State}, get_alarms(State)),
-    EvtId = erlang:now(),
+    EvtId = os:timestamp(),
     ?assertEqual({{error, not_active},State}, get_alarm(EvtId, State)),
     ?assertEqual({{error, not_active},State}, get_alarm(full, disk_1, State)).
 
