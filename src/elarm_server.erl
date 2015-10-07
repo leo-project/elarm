@@ -48,6 +48,7 @@
 -include_lib("elarm/include/elarm.hrl").
 
 -define(SERVER, ?MODULE).
+-define(DEF_TIMEOUT, timer:seconds(30)).
 
 -record(state, {alarmlist_cb,
                 alarmlist_state,
@@ -77,12 +78,12 @@ start_link(Name, Opts) when is_list(Opts) ->
 -spec raise(pid()|atom(), alarm_id(), alarm_src(), additional_information()) ->
           ok.
 raise(Pid, Id, Src, AddInfo) ->
-    gen_server:call(Pid, {raise, Id, Src, AddInfo}).
+    gen_server:call(Pid, {raise, Id, Src, AddInfo}, ?DEF_TIMEOUT).
 
 %% Clear an alarm
 -spec clear(pid()|atom(), alarm_id(), alarm_src(), clear_reason()) -> ok.
 clear(Pid, Id, Src, Reason) ->
-    gen_server:call(Pid, {clear, Id, Src, Reason}).
+    gen_server:call(Pid, {clear, Id, Src, Reason}, ?DEF_TIMEOUT).
 
 %% -------------------------------------------------------------------
 %% Functions used by presentation layer to access alarm status
@@ -91,56 +92,56 @@ clear(Pid, Id, Src, Reason) ->
 -spec subscribe(pid()|atom(), sub_filter(), pid()) ->
                                             {ok, reference(), [alarm()]}.
 subscribe(Pid, Filter, Subscriber) ->
-    gen_server:call(Pid, {subscribe, Subscriber, Filter}).
+    gen_server:call(Pid, {subscribe, Subscriber, Filter}, ?DEF_TIMEOUT).
 
 %% Cancel subscription.
 -spec unsubscribe(pid()|atom(), reference()) -> ok.
 unsubscribe(Pid, Ref) ->
-    gen_server:call(Pid, {unsubscribe, Ref}).
+    gen_server:call(Pid, {unsubscribe, Ref}, ?DEF_TIMEOUT).
 
 %% Acknowledge one or more alarms.
 -spec acknowledge(pid()|atom(), alarm_id(), alarm_src(), user_id()) ->
           ok | {error, term()}.
 acknowledge(Pid, AlarmId, AlarmSrc, UserId) ->
-    gen_server:call(Pid, {acknowledge, AlarmId, AlarmSrc, UserId}).
+    gen_server:call(Pid, {acknowledge, AlarmId, AlarmSrc, UserId}, ?DEF_TIMEOUT).
 
 %% Unacknowledge one or more alarms.
 -spec unacknowledge(pid()|atom(), alarm_id(), alarm_src(), user_id()) ->
           ok | {error, term()}.
 unacknowledge(Pid, AlarmId, AlarmSrc, UserId) ->
-    gen_server:call(Pid, {unacknowledge, AlarmId, AlarmSrc, UserId}).
+    gen_server:call(Pid, {unacknowledge, AlarmId, AlarmSrc, UserId}, ?DEF_TIMEOUT).
 
 %% Add a comment to an alarm
 -spec add_comment(pid()|atom(), alarm_id(), alarm_src(), binary(), user_id()) ->
                                                         ok | {error, term()}.
 add_comment(Pid, AlarmId, AlarmSrc, Text, UserId) ->
-    gen_server:call(Pid, {add_comment, AlarmId, AlarmSrc, Text, UserId}).
+    gen_server:call(Pid, {add_comment, AlarmId, AlarmSrc, Text, UserId}, ?DEF_TIMEOUT).
 
 -spec get_alarms(pid()|atom()) -> {ok, [alarm()]} | {error, term()}.
 get_alarms(Pid) ->
-    gen_server:call(Pid, get_alarms).
+    gen_server:call(Pid, get_alarms, ?DEF_TIMEOUT).
 
 %% -------------------------------------------------------------------
 %% Functions used by presentation layer to access alarm log
 
 -spec read_log(pid()|atom(), term()) -> [alarm()].
 read_log(Pid, Filter) ->
-    gen_server:call(Pid, {read_log, Filter}).
+    gen_server:call(Pid, {read_log, Filter}, ?DEF_TIMEOUT).
 
 get_configured(Pid) ->
-    gen_server:call(Pid, get_configured).
+    gen_server:call(Pid, get_configured, ?DEF_TIMEOUT).
 
 get_unconfigured(Pid) ->
-    gen_server:call(Pid, get_unconfigured).
+    gen_server:call(Pid, get_unconfigured, ?DEF_TIMEOUT).
 
 get_all_configuration(Pid) ->
-    gen_server:call(Pid, get_all_configuration).
+    gen_server:call(Pid, get_all_configuration, ?DEF_TIMEOUT).
 
 get_default_configuration(Pid) ->
-    gen_server:call(Pid, get_default_configuration).
+    gen_server:call(Pid, get_default_configuration, ?DEF_TIMEOUT).
 
 add_configuration(Pid, AlarmId, Config) ->
-    gen_server:call(Pid, {add_configuration, AlarmId, Config}).
+    gen_server:call(Pid, {add_configuration, AlarmId, Config}, ?DEF_TIMEOUT).
 
 %%%===================================================================
 %%% gen_server callbacks
