@@ -81,7 +81,8 @@ raise(Pid, Id, Src, AddInfo) ->
     gen_server:call(Pid, {raise, Id, Src, AddInfo}, ?DEF_TIMEOUT).
 
 %% Clear an alarm
--spec clear(pid()|atom(), alarm_id(), alarm_src(), clear_reason()) -> ok.
+-spec clear(pid()|atom(), alarm_id(), alarm_src(), clear_reason()) ->
+          ok | {error, not_active}.
 clear(Pid, Id, Src, Reason) ->
     gen_server:call(Pid, {clear, Id, Src, Reason}, ?DEF_TIMEOUT).
 
